@@ -1,0 +1,15 @@
+{
+  "name": "yt-backend",
+  "version": "1.0.0",
+  "description": "backend of youtube like application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "echo nodemon src/index.js"
+  },
+  "author": "Anmol Goyal",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
