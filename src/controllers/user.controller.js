@@ -248,6 +248,27 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "User fetched sucessfully", req.user));
 });
 
+const updateUserInfo = asyncHandler(async (req, res) => {
+  const { email, fullName } = req.body;
+  if (!email || !fullName) {
+    throw new ApiError(401, "email and fullName is required");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        fullName,
+        email,
+      },
+    },
+    { new: true }
+  ).select("-password -refreshToken");
+  if (!user) {
+    throw new ApiError(401, "User not found");
+  }
+  return res.status(200).json(200, "user info updated sucessfully", user);
+});
+
 export {
   registerUser,
   loginUser,
@@ -255,4 +276,5 @@ export {
   refreshAccessToken,
   changeCurrentPassword,
   getCurrentUser,
+  updateUserInfo
 };
