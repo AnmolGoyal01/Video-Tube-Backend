@@ -269,6 +269,62 @@ const updateUserInfo = asyncHandler(async (req, res) => {
   return res.status(200).json(200, "user info updated sucessfully", user);
 });
 
+const updateAvatar = asyncHandler(async (req, res) => {
+  const avatarLocalPath = req.file?.path;
+  if (!avatarLocalPath) {
+    throw new ApiError(401, "Avatar file is missing");
+  }
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  if (!avatar?.url) {
+    throw new ApiError(401, "Error while uploading on Cloudinary");
+  }
+  const user = User.findByIdAndUpdate(
+    req.user?.id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    {
+      new: true,
+    }
+  ).select("-passowrd -refreshToken");
+
+  //todo Delete old Avatar file from cloudinary
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Avatar updated Sucessfully", user));
+});
+
+const updateCoverImage = asyncHandler(async (req, res) => {
+  const coverImageLocalPath = req.file?.path;
+  if (!coverImageLocalPath) {
+    throw new ApiError(401, "Avatar file is missing");
+  }
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+  if (!coverImage?.url) {
+    throw new ApiError(401, "Error while uploading on Cloudinary");
+  }
+  const user = User.findByIdAndUpdate(
+    req.user?.id,
+    {
+      $set: {
+        coverImage: coverImage.url,
+      },
+    },
+    {
+      new: true,
+    }
+  ).select("-passowrd -refreshToken");
+
+  //todo Delete old Avatar file from cloudinary
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Cover Image updated Sucessfully", user));
+});
+
 export {
   registerUser,
   loginUser,
@@ -276,5 +332,7 @@ export {
   refreshAccessToken,
   changeCurrentPassword,
   getCurrentUser,
-  updateUserInfo
+  updateUserInfo,
+  updateAvatar,
+  updateCoverImage,
 };
