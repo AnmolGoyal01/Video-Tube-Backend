@@ -437,7 +437,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     },
   ]);
 
-  if (!user) {
+  if (!user?.length) {
     throw new ApiError(400, "Error fetching watch history");
   }
 
