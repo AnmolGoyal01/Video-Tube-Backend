@@ -88,7 +88,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, "User Registered Sucessfully", createdUser));
+    .json(new ApiResponse(201, createdUser, "User Registered Sucessfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -146,11 +146,15 @@ const loginUser = asyncHandler(async (req, res) => {
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
     .json(
-      new ApiResponse(200, "User logged in Sucessfully", {
-        user: loggedInUser,
-        refreshToken,
-        accessToken,
-      })
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          refreshToken,
+          accessToken,
+        },
+        "User logged in Sucessfully"
+      )
     );
 });
 
@@ -176,7 +180,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, "user logged out", {}));
+    .json(new ApiResponse(200, {}, "user logged out"));
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -209,10 +213,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", newRefreshToken, options)
       .json(
-        new ApiResponse(200, "Access token refreshed", {
-          accessToken,
-          refreshToken: newRefreshToken,
-        })
+        new ApiResponse(
+          200,
+          {
+            accessToken,
+            refreshToken: newRefreshToken,
+          },
+          "Access token refreshed"
+        )
       );
   } catch (error) {
     throw new ApiError(401, error?.message || "Unauthorized request");
@@ -240,13 +248,13 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "password updated sucessfully", {}));
+    .json(new ApiResponse(200, {}, "password updated sucessfully"));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiResponse(200, "User fetched sucessfully", req.user));
+    .json(new ApiResponse(200, req.user, "User fetched sucessfully"));
 });
 
 const updateUserInfo = asyncHandler(async (req, res) => {
@@ -295,7 +303,7 @@ const updateAvatar = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Avatar updated Sucessfully", user));
+    .json(new ApiResponse(200, user, "Avatar updated Sucessfully"));
 });
 
 const updateCoverImage = asyncHandler(async (req, res) => {
@@ -323,7 +331,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Cover Image updated Sucessfully", user));
+    .json(new ApiResponse(200, user, "Cover Image updated Sucessfully"));
 });
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
@@ -390,7 +398,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiResponse(200, "User channel fetched successfully", channel[0])
+      new ApiResponse(200, channel[0], "User channel fetched successfully")
     );
 });
 
@@ -446,8 +454,8 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        "watch history fetched sucessfully",
-        user[0].watchHistory
+        user[0].watchHistory,
+        "watch history fetched sucessfully"
       )
     );
 });
