@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { API_VERSION } from "./constants.js";
 
 const app = express();
 
@@ -17,9 +18,11 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // routes import
-import userRouter from "./routes/user.routes.js"
+import healthCheckRouter from "./routes/healthcheck.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 // routes declaration
-app.use("/api/v1/user", userRouter)
+app.use(`${API_VERSION}/healthCheck`, healthCheckRouter);
+app.use(`${API_VERSION}/user`, userRouter);
 
 export { app };
